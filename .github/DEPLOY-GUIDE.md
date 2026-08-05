@@ -91,7 +91,9 @@ The subject must be `CN=prevailep.com.au`. If it says `CN=*.github.io`, the cert
 
 - **Repo must stay public.** Making it private silently disables Pages and the site 404s. GitHub Free does not support Pages on private repos.
 - **Deleting `CNAME`** drops the custom domain.
-- **Security headers don't apply.** `netlify.toml` defines a CSP and related headers, but GitHub Pages does not support custom headers at all and no config changes that. Those protections are currently inactive. A `<meta http-equiv="Content-Security-Policy">` tag in `index.html` can recover part of it.
+- **Security policy lives in the HTML, not in headers.** GitHub Pages cannot send custom headers, so the CSP from `netlify.toml` was ported into a `<meta http-equiv="Content-Security-Policy">` tag in both `index.html` and `privacy.html`. It sits directly under `<meta charset>` and **must stay there** — a meta CSP only governs content that appears *after* it in the document.
+  - **If you add anything external** (analytics, a booking widget, embedded video, a new font host), it will be **blocked** until you add its domain to the policy. Symptom: the feature silently doesn't load, with a CSP violation in the browser console. Update the `content` attribute in *both* files.
+  - **Still not covered:** `frame-ancestors`, `X-Frame-Options`, `X-Content-Type-Options`, and `Permissions-Policy` are header-only and cannot be set via meta. Clickjacking protection is therefore unavailable on GitHub Pages. Moving to Netlify or Cloudflare Pages would restore them via `netlify.toml`.
 
 ---
 
