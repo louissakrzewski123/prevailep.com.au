@@ -97,10 +97,8 @@ The subject must be `CN=prevailep.com.au`. If it says `CN=*.github.io`, the cert
 
 ## Outstanding to-dos
 
-- [ ] **Waitlist form is not connected.** `index.html` still has the placeholder:
-      `value="REPLACE_WITH_YOUR_WEB3FORMS_ACCESS_KEY"`
-      Get a key from [web3forms.com](https://web3forms.com) and paste it in, or submissions fail silently. **Do this before sharing the link anywhere.**
-- [ ] Tick **Enforce HTTPS** once the certificate issues.
+- [x] ~~**Waitlist form connected.**~~ Web3Forms key is live in `index.html`. Signups email `louissakrzewski123@gmail.com`. Manage the form at [web3forms.com](https://web3forms.com).
+- [x] ~~Tick **Enforce HTTPS**~~ — done, certificate issued and `http://` now 301s to `https://`.
 - [ ] Confirm the contact email. Currently `louissakrzewski123@gmail.com`; a `hello@prevailep.com.au` address would look more professional.
 - [ ] Add a photo in the About section (placeholder marked *"Add a friendly photo of Louis here"*).
 - [ ] Set the effective date on `privacy.html`.
