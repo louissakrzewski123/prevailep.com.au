@@ -35,6 +35,15 @@
   var statusEl = document.getElementById("wf-status");
   var submitBtn = document.getElementById("wf-submit");
 
+  // Announce form outcomes for analytics.js to pick up. Kept as a DOM event
+  // so the form keeps working unchanged if analytics is removed, and so
+  // analytics never sees anything beyond what's passed in here.
+  function announce(name, detail) {
+    try {
+      document.dispatchEvent(new CustomEvent("prevail:" + name, { detail: detail || {} }));
+    } catch (err) { /* never let measurement break the form */ }
+  }
+
   function setFieldValidity(input, ok) {
     var wrap = input.closest(".field");
     if (wrap) { wrap.classList.toggle("invalid", !ok); }
@@ -73,6 +82,7 @@
     if (!validate()) {
       statusEl.className = "form-status error";
       statusEl.textContent = "Please complete the required fields highlighted above.";
+      announce("waitlist-error", { reason: "validation" });
       return;
     }
 
@@ -80,6 +90,7 @@
     if (accessKey.indexOf("REPLACE_WITH_") === 0) {
       statusEl.className = "form-status error";
       statusEl.textContent = "This form isn't connected yet — add your Web3Forms access key (see the deploy guide).";
+      announce("waitlist-error", { reason: "not_configured" });
       return;
     }
 
@@ -101,12 +112,18 @@
         statusEl.className = "form-status success";
         statusEl.textContent = "Thank you — you're on the waitlist. I'll be in touch as soon as a spot opens.";
         statusEl.focus && statusEl.focus();
+        // Segments only. Name, email, phone and the message never leave here.
+        announce("waitlist-success", {
+          enquiring_as: data.enquiring_as || "",
+          funding: data.funding || ""
+        });
       } else {
         throw new Error(json.message || "Submission failed");
       }
     } catch (err) {
       statusEl.className = "form-status error";
       statusEl.textContent = "Something went wrong sending your enquiry. Please email louissakrzewski123@gmail.com or call 0400 111 299.";
+      announce("waitlist-error", { reason: "network" });
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = originalLabel;

@@ -7,7 +7,7 @@
        declared in-document. Must stay above any resource it governs.
        Note: frame-ancestors / X-Frame-Options / nosniff are header-only and
        cannot be set here — see .github/DEPLOY-GUIDE.md -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self' https://api.web3forms.com; form-action 'self' https://api.web3forms.com; base-uri 'self'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://www.googletagmanager.com; connect-src 'self' https://api.web3forms.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com; form-action 'self' https://api.web3forms.com; base-uri 'self'; object-src 'none'" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -36,6 +36,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- Analytics (GA4). Inert until a Measurement ID is set in analytics.js. -->
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <script src="analytics.js" defer></script>
 
   <!-- Structured data: local business -->
   <script type="application/ld+json">

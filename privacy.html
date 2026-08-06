@@ -7,7 +7,7 @@
        declared in-document. Must stay above any resource it governs.
        Note: frame-ancestors / X-Frame-Options / nosniff are header-only and
        cannot be set here — see .github/DEPLOY-GUIDE.md -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self' https://api.web3forms.com; form-action 'self' https://api.web3forms.com; base-uri 'self'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://www.googletagmanager.com; connect-src 'self' https://api.web3forms.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com; form-action 'self' https://api.web3forms.com; base-uri 'self'; object-src 'none'" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,6 +21,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <script src="analytics.js" defer></script>
   <style>
     .legal { padding-block: clamp(2.4rem, 6vw, 4rem); }
     .legal h2 { font-size: 1.3rem; margin-top: 2.2rem; }
@@ -101,7 +103,13 @@
         <h2>7. Complaints</h2>
         <p>Contact us first (details below). If unsatisfied, you may contact the Office of the Australian Information Commissioner (<a href="https://www.oaic.gov.au" target="_blank" rel="noopener">oaic.gov.au</a>, 1300&nbsp;363&nbsp;992) or the NDIS Quality and Safeguards Commission (<a href="https://www.ndiscommission.gov.au" target="_blank" rel="noopener">ndiscommission.gov.au</a>, 1800&nbsp;035&nbsp;544).</p>
 
-        <h2>8. Changes</h2>
+        <h2>8. Website analytics and cookies</h2>
+        <p>This website uses Google Analytics to understand how people find and use the site — for example which pages are read and whether visitors reach the waitlist form. This is entirely separate from your clinical records and is never linked to them.</p>
+        <p>Google Analytics places cookies in your browser and collects your device and browser type, approximate (city-level) location, the pages you view, and which links you click. Google does not store your full IP address. We do <strong>not</strong> send Google your name, email address, phone number, health information, or anything you type into the waitlist message box. When a waitlist form is submitted we record only two non-identifying categories — the type of enquirer and the likely funding source — so we know which services people need.</p>
+        <p>Advertising and remarketing features are switched off, so this information is not used to build advertising profiles or follow you around the internet.</p>
+        <p>If you would rather not be measured, you can block cookies in your browser settings or install Google's <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Analytics Opt-out Browser Add-on</a>. The website works exactly the same either way.</p>
+
+        <h2>9. Changes</h2>
         <p>This policy may be updated from time to time; the current version is available on request and at prevailep.com.au.</p>
 
         <h2>Contact</h2>

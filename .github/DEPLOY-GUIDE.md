@@ -24,6 +24,7 @@ Internal notes. This file lives in `.github/` so GitHub Pages does **not** publi
 | `privacy.html` | Privacy policy page |
 | `styles.css` | All the styling / design |
 | `script.js` | Mobile menu + waitlist form logic |
+| `analytics.js` | Google Analytics 4 + conversion tracking. **Needs your Measurement ID pasted in** — see below |
 | `favicon.svg`, `apple-touch-icon.png` | Browser tab + phone icons |
 | `og-image.png` | Preview image shown when the link is shared |
 | `robots.txt`, `sitemap.xml` | SEO |
@@ -87,6 +88,51 @@ The subject must be `CN=prevailep.com.au`. If it says `CN=*.github.io`, the cert
 
 ---
 
+## Google Analytics
+
+### Turning it on (5 minutes, one line to edit)
+
+1. Go to [analytics.google.com](https://analytics.google.com) and sign in with your Google account.
+2. **Admin** (cog, bottom-left) → **Create** → **Property**. Name it `Prevail Exercise Physiology`, timezone **Australia/Brisbane**, currency **AUD**.
+3. When it asks for a platform, choose **Web**. Website URL `https://prevailep.com.au`, stream name `Prevail website`.
+4. It shows you a **Measurement ID** in the top right — `G-` followed by ten characters. Copy it. *(Ignore the installation snippet it offers; it's already wired up.)*
+5. Open `analytics.js` and replace `REPLACE_WITH_GA4_MEASUREMENT_ID` on line 19 with that ID. Keep the quotes:
+
+   ```js
+   var MEASUREMENT_ID = "G-ABC1234XYZ";
+   ```
+
+6. Commit and push. Open the site, then check **Reports → Realtime** in Analytics — you should appear within about 30 seconds.
+
+Until step 5 is done the file is completely inert: no cookies are set and no requests are made to Google.
+
+### What gets tracked
+
+Page views and scrolling come free with GA4. On top of that:
+
+| Event | Fires when |
+|-------|-----------|
+| `generate_lead` | **The conversion.** Waitlist form submitted successfully |
+| `waitlist_start` | Someone starts typing in the form — the gap to `generate_lead` is your drop-off |
+| `waitlist_error` | Form failed (`validation` or `network`) |
+| `waitlist_cta_click` | Any "Join the waitlist" button, tagged with which section it was in |
+| `contact_click` | Phone or email link tapped |
+| `faq_open` | An FAQ opened, with the question — tells you what people are worried about |
+
+**Mark the conversion:** in GA4, **Admin → Events**, find `generate_lead` and toggle **Mark as key event**. Without this it's just a number in a list; with it, it becomes the metric every report can be measured against.
+
+### Privacy choices baked in
+
+- **Advertising storage, ad user data and ad personalisation are all set to `denied`** (Consent Mode v2), and Google Signals is off. Google's personalised-advertising policy prohibits building ad audiences from health or disability signals, so this is the correct default for this site — not just a nicety. Don't flip it on without reading that policy.
+- **No personal data reaches Google.** On a successful submission only two dropdown values are sent (enquirer type, funding source). Name, email, phone and the free-text message never leave the browser. If you'd rather send nothing at all, delete those two lines in `script.js`.
+- **Section 8 of `privacy.html` discloses all of this.** If you change what's tracked, change that section too.
+
+### No cookie banner?
+
+Correct — Australian privacy law doesn't require one, and the Privacy Act is satisfied by disclosure in the privacy policy. If you ever advertise into the EU or UK, you'd need a real consent banner before GA loads.
+
+---
+
 ## Known gotchas
 
 - **Repo must stay public.** Making it private silently disables Pages and the site 404s. GitHub Free does not support Pages on private repos.
@@ -101,9 +147,14 @@ The subject must be `CN=prevailep.com.au`. If it says `CN=*.github.io`, the cert
 
 - [x] ~~**Waitlist form connected.**~~ Web3Forms key is live in `index.html`. Signups email `louissakrzewski123@gmail.com`. Manage the form at [web3forms.com](https://web3forms.com).
 - [x] ~~Tick **Enforce HTTPS**~~ — done, certificate issued and `http://` now 301s to `https://`.
+- [ ] **Paste the GA4 Measurement ID into `analytics.js`** (see *Google Analytics* above). Everything else is wired.
+- [ ] **Remove the draft banner and set the effective date on `privacy.html`.** The grey "This is a draft policy prepared for review" box is publicly visible right now, and the date reads `[to be set on approval]`.
 - [ ] Confirm the contact email. Currently `louissakrzewski123@gmail.com`; a `hello@prevailep.com.au` address would look more professional.
 - [ ] Add a photo in the About section (placeholder marked *"Add a friendly photo of Louis here"*).
-- [ ] Set the effective date on `privacy.html`.
+- [ ] Fix `medicalSpecialty` in the structured data in `index.html` — it currently says `Physiotherapy`, which is a protected AHPRA title you don't hold. Closest valid schema.org value is `PhysicalTherapy`, or drop the field.
+- [ ] Add a postal/service address to the structured data — local SEO leans on it heavily.
+- [ ] Verify the site in Google Search Console and submit `sitemap.xml`.
+- [ ] Create a Google Business Profile.
 - [ ] *(Optional)* Add ESSA / AEP registration number as a trust signal.
 - [ ] *(Optional)* Add 2–3 testimonials once you have written, de-identified consent.
 
