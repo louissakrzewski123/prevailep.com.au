@@ -1,6 +1,16 @@
 /* =====================================================================
    Prevail Exercise Physiology — script.js
-   Mobile nav, footer year, and Web3Forms waitlist submission.
+   Mobile nav, footer year, and a shared Web3Forms submit path.
+
+   Any form marked up as <form data-w3form data-event="name"> gets
+   validation, an accessible status message and a Web3Forms submission —
+   so the waitlist, the intro-call booking and the referral form all
+   behave identically without triplicating this logic.
+
+   Required inside each form:
+     input[name=access_key]   Web3Forms key
+     .form-status             where the result message is announced
+     button[type=submit]
    ===================================================================== */
 (function () {
   "use strict";
@@ -28,20 +38,15 @@
     });
   }
 
-  /* ---------- Waitlist form (Web3Forms) ---------- */
-  var form = document.getElementById("waitlist-form");
-  if (!form) { return; }
-
-  var statusEl = document.getElementById("wf-status");
-  var submitBtn = document.getElementById("wf-submit");
+  /* ---------- Shared form handling ---------- */
 
   // Announce form outcomes for analytics.js to pick up. Kept as a DOM event
-  // so the form keeps working unchanged if analytics is removed, and so
+  // so forms keep working unchanged if analytics is removed, and so
   // analytics never sees anything beyond what's passed in here.
   function announce(name, detail) {
     try {
       document.dispatchEvent(new CustomEvent("prevail:" + name, { detail: detail || {} }));
-    } catch (err) { /* never let measurement break the form */ }
+    } catch (err) { /* never let measurement break a form */ }
   }
 
   function setFieldValidity(input, ok) {
@@ -49,84 +54,103 @@
     if (wrap) { wrap.classList.toggle("invalid", !ok); }
   }
 
-  function validate() {
-    var ok = true;
-    var required = form.querySelectorAll("[required]");
-    for (var i = 0; i < required.length; i++) {
-      var el = required[i];
-      var valid = el.type === "checkbox" ? el.checked : String(el.value).trim() !== "";
-      if (valid && el.type === "email") {
-        valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value);
+  function initForm(form) {
+    var eventName = form.getAttribute("data-event") || "form";
+    var statusEl = form.querySelector(".form-status");
+    var submitBtn = form.querySelector('button[type="submit"]');
+    if (!statusEl || !submitBtn) { return; }
+
+    // Which fields to report back to analytics on success. Segments only —
+    // never a name, email, phone number or anything free-typed.
+    var segmentFields = (form.getAttribute("data-segments") || "")
+      .split(",").map(function (s) { return s.trim(); }).filter(Boolean);
+
+    function validate() {
+      var ok = true;
+      var required = form.querySelectorAll("[required]");
+      for (var i = 0; i < required.length; i++) {
+        var el = required[i];
+        var valid = el.type === "checkbox" ? el.checked : String(el.value).trim() !== "";
+        if (valid && el.type === "email") {
+          valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value);
+        }
+        setFieldValidity(el, valid);
+        if (!valid && ok) { el.focus(); }   // focus the first invalid field
+        ok = ok && valid;
       }
-      setFieldValidity(el, valid);
-      if (!valid && ok) { el.focus(); }   // focus the first invalid field
-      ok = ok && valid;
+      return ok;
     }
-    return ok;
+
+    // Clear the invalid state as the user fixes a field
+    form.addEventListener("input", function (e) {
+      if (e.target.closest(".field.invalid")) {
+        var el = e.target;
+        var valid = el.type === "checkbox" ? el.checked : String(el.value).trim() !== "";
+        if (valid) { setFieldValidity(el, true); }
+      }
+    });
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      statusEl.className = "form-status";
+      statusEl.textContent = "";
+
+      if (!validate()) {
+        statusEl.className = "form-status error";
+        statusEl.textContent = "Please complete the required fields highlighted above.";
+        announce(eventName + "-error", { reason: "validation" });
+        return;
+      }
+
+      var keyInput = form.querySelector('input[name="access_key"]');
+      var accessKey = keyInput ? keyInput.value : "";
+      if (!accessKey || accessKey.indexOf("REPLACE_WITH_") === 0) {
+        statusEl.className = "form-status error";
+        statusEl.textContent = "This form isn't connected yet — add your Web3Forms access key (see the deploy guide).";
+        announce(eventName + "-error", { reason: "not_configured" });
+        return;
+      }
+
+      submitBtn.disabled = true;
+      var originalLabel = submitBtn.textContent;
+      submitBtn.textContent = "Sending…";
+
+      try {
+        var data = Object.fromEntries(new FormData(form).entries());
+        var res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(data)
+        });
+        var json = await res.json();
+
+        if (res.ok && json.success) {
+          var successMsg = form.getAttribute("data-success") ||
+            "Thank you — your message has been sent. I'll be in touch shortly.";
+          form.reset();
+          statusEl.className = "form-status success";
+          statusEl.textContent = successMsg;
+          statusEl.setAttribute("tabindex", "-1");
+          statusEl.focus();
+
+          var segments = {};
+          segmentFields.forEach(function (f) { segments[f] = data[f] || ""; });
+          announce(eventName + "-success", segments);
+          form.dispatchEvent(new CustomEvent("prevail:submitted", { bubbles: true }));
+        } else {
+          throw new Error(json.message || "Submission failed");
+        }
+      } catch (err) {
+        statusEl.className = "form-status error";
+        statusEl.textContent = "Something went wrong sending this. Please email louissakrzewski123@gmail.com or call 0400 111 299.";
+        announce(eventName + "-error", { reason: "network" });
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
+      }
+    });
   }
 
-  // Clear the invalid state as the user fixes a field
-  form.addEventListener("input", function (e) {
-    if (e.target.closest(".field.invalid")) {
-      var el = e.target;
-      var valid = el.type === "checkbox" ? el.checked : String(el.value).trim() !== "";
-      if (valid) { setFieldValidity(el, true); }
-    }
-  });
-
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    statusEl.className = "form-status";
-    statusEl.textContent = "";
-
-    if (!validate()) {
-      statusEl.className = "form-status error";
-      statusEl.textContent = "Please complete the required fields highlighted above.";
-      announce("waitlist-error", { reason: "validation" });
-      return;
-    }
-
-    var accessKey = form.querySelector('input[name="access_key"]').value;
-    if (accessKey.indexOf("REPLACE_WITH_") === 0) {
-      statusEl.className = "form-status error";
-      statusEl.textContent = "This form isn't connected yet — add your Web3Forms access key (see the deploy guide).";
-      announce("waitlist-error", { reason: "not_configured" });
-      return;
-    }
-
-    submitBtn.disabled = true;
-    var originalLabel = submitBtn.textContent;
-    submitBtn.textContent = "Sending…";
-
-    try {
-      var data = Object.fromEntries(new FormData(form).entries());
-      var res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(data)
-      });
-      var json = await res.json();
-
-      if (res.ok && json.success) {
-        form.reset();
-        statusEl.className = "form-status success";
-        statusEl.textContent = "Thank you — you're on the waitlist. I'll be in touch as soon as a spot opens.";
-        statusEl.focus && statusEl.focus();
-        // Segments only. Name, email, phone and the message never leave here.
-        announce("waitlist-success", {
-          enquiring_as: data.enquiring_as || "",
-          funding: data.funding || ""
-        });
-      } else {
-        throw new Error(json.message || "Submission failed");
-      }
-    } catch (err) {
-      statusEl.className = "form-status error";
-      statusEl.textContent = "Something went wrong sending your enquiry. Please email louissakrzewski123@gmail.com or call 0400 111 299.";
-      announce("waitlist-error", { reason: "network" });
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalLabel;
-    }
-  });
+  var forms = document.querySelectorAll("form[data-w3form]");
+  for (var i = 0; i < forms.length; i++) { initForm(forms[i]); }
 })();

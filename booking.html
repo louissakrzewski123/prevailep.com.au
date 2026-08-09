@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8" />
+
+  <!-- Security policy. GitHub Pages cannot send custom headers, so this is
+       declared in-document. Must stay above any resource it governs.
+       Note: frame-ancestors / X-Frame-Options / nosniff are header-only and
+       cannot be set here — see .github/DEPLOY-GUIDE.md -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://www.googletagmanager.com; connect-src 'self' https://api.web3forms.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com; form-action 'self' https://api.web3forms.com; base-uri 'self'; object-src 'none'" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book a free 15-minute chat | Prevail Exercise Physiology</title>
+  <meta name="description" content="Pick a time for a free, no-obligation 15-minute call with Louis — an Accredited Exercise Physiologist covering Brisbane, South-East Queensland and telehealth Australia-wide." />
+  <meta name="theme-color" content="#0f5a54" />
+  <link rel="canonical" href="https://prevailep.com.au/booking.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Book a free 15-minute chat | Prevail Exercise Physiology" />
+  <meta property="og:description" content="A relaxed, no-obligation call to work out whether exercise physiology is right for you." />
+  <meta property="og:url" content="https://prevailep.com.au/booking.html" />
+  <meta property="og:image" content="https://prevailep.com.au/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <script src="analytics.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Prevail Exercise Physiology — home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" width="40" height="40" role="img">
+            <rect width="40" height="40" rx="11" fill="url(#pg)"></rect>
+            <defs>
+              <linearGradient id="pg" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#1b8f83"></stop>
+                <stop offset="1" stop-color="#0f5a54"></stop>
+              </linearGradient>
+            </defs>
+            <rect x="10" y="23" width="4.6" height="7" rx="2.3" fill="#fff" opacity="0.92"></rect>
+            <rect x="17.7" y="18" width="4.6" height="12" rx="2.3" fill="#fff" opacity="0.96"></rect>
+            <rect x="25.4" y="12" width="4.6" height="18" rx="2.3" fill="#fff"></rect>
+            <circle cx="27.7" cy="8.4" r="2.4" fill="#8fe0d3"></circle>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <span class="brand-name">Prevail</span>
+          <span class="brand-sub">Exercise Physiology</span>
+        </span>
+      </a>
+      <nav class="main-nav" aria-label="Primary">
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-list" aria-label="Open menu">
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+        </button>
+        <ul class="nav-list" id="nav-list">
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="index.html#funding">Funding</a></li>
+          <li><a href="index.html#check">Check my funding</a></li>
+          <li><a href="for-referrers.html">For referrers</a></li>
+          <li><a class="btn btn-primary btn-sm" href="index.html#waitlist">Join the waitlist</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="container narrow">
+        <p class="eyebrow">No cost · No obligation</p>
+        <h1>Book a free 15-minute chat</h1>
+        <p class="lead">A relaxed call to talk through what you're hoping to change, answer your questions, and work out together whether I'm the right fit. No assessment, no commitment, no sales pitch — if I'm not what you need, I'll tell you and point you somewhere better.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container narrow">
+        <div class="booking">
+          <span class="booking-tz">◷ All times in Brisbane (AEST)</span>
+
+          <p class="booking-label" id="day-label">1. Pick a day</p>
+          <div class="day-strip" id="day-strip" role="group" aria-labelledby="day-label">
+            <!-- booking.js renders day buttons here -->
+          </div>
+
+          <div id="slot-wrap" hidden>
+            <p class="booking-label" id="slot-label">2. Pick a time <span class="optional">(<span id="bk-duration">15</span> minutes)</span></p>
+            <div class="slot-grid" id="slot-grid" role="group" aria-labelledby="slot-label">
+              <!-- booking.js renders time buttons here -->
+            </div>
+          </div>
+
+          <div class="booking-selected" id="booking-selected" hidden>
+            <span class="tick" aria-hidden="true">✓</span>
+            <span id="booking-selected-text" role="status" aria-live="polite"></span>
+          </div>
+
+          <div class="booking-form" id="booking-form-wrap" hidden>
+            <p class="booking-label">3. Your details</p>
+
+            <form id="booking-form" novalidate
+                  data-w3form
+                  data-event="booking"
+                  data-segments="enquiring_as"
+                  data-success="Got it — your time is pencilled in. I'll confirm by text or email within one business day. If you don't hear from me, please call 0400 111 299.">
+
+              <input type="hidden" name="access_key" value="18d2da56-0898-432a-a40b-cee9866d1ed1" />
+              <input type="hidden" name="subject" value="New Prevail intro-call request" />
+              <input type="hidden" name="from_name" value="Prevail EP Website — Booking" />
+              <input type="hidden" name="requested_time" id="bk-slot" value="" />
+              <!-- Honeypot spam trap (leave empty) -->
+              <input type="checkbox" name="botcheck" class="visually-hidden" style="display:none" tabindex="-1" autocomplete="off" />
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="bk-name">Your name <span class="req">*</span></label>
+                  <input id="bk-name" name="name" type="text" autocomplete="name" required />
+                </div>
+                <div class="field">
+                  <label for="bk-phone">Phone <span class="req">*</span></label>
+                  <input id="bk-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required />
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="bk-email">Email <span class="req">*</span></label>
+                  <input id="bk-email" name="email" type="email" autocomplete="email" required />
+                </div>
+                <div class="field">
+                  <label for="bk-role">I'm enquiring as <span class="req">*</span></label>
+                  <select id="bk-role" name="enquiring_as" required>
+                    <option value="" selected disabled>Please choose…</option>
+                    <option>Participant / client</option>
+                    <option>Family member or carer</option>
+                    <option>Support coordinator or referrer</option>
+                    <option>GP or health professional</option>
+                    <option>Private client</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="bk-topic">Anything you'd like me to know beforehand? <span class="optional">(optional)</span></label>
+                <textarea id="bk-topic" name="message" rows="3" placeholder="A sentence or two is plenty — what you're hoping to work on, or a question you want answered."></textarea>
+              </div>
+
+              <div class="field consent">
+                <label class="checkbox">
+                  <input type="checkbox" id="bk-consent" name="consent" value="Yes" required />
+                  <span>I consent to Prevail Exercise Physiology contacting me about this call, and I've read the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>. <span class="req">*</span></span>
+                </label>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block">Request this time</button>
+
+              <p class="form-note">I'll confirm your time by text or email within one business day. Please don't include detailed health information here — we'll cover all of that on the call.</p>
+
+              <p class="form-status" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+
+        <div class="section-head" style="margin-top:3rem;">
+          <h2>What happens on the call</h2>
+        </div>
+        <ol class="weeks">
+          <li class="week">
+            <div class="week-when">First<small>5 min</small></div>
+            <div>
+              <h3>You talk, I listen</h3>
+              <p>What's going on, what's getting harder, and what you'd like to be able to do that you can't do comfortably right now.</p>
+            </div>
+          </li>
+          <li class="week">
+            <div class="week-when">Then<small>5 min</small></div>
+            <div>
+              <h3>I tell you honestly whether I can help</h3>
+              <p>Including if the answer is no. If a physio, OT or someone with a different specialty would serve you better, I'll say so and suggest where to look.</p>
+            </div>
+          </li>
+          <li class="week">
+            <div class="week-when">Last<small>5 min</small></div>
+            <div>
+              <h3>Practicalities</h3>
+              <p>Funding, costs, how far out I'm booked, and what an assessment would involve. You'll hang up knowing exactly what it would cost and when you could start.</p>
+            </div>
+          </li>
+        </ol>
+
+        <div class="contact-strip">
+          <div class="ci">
+            <span class="ci-label">Prefer to just ring?</span>
+            <span class="ci-value"><a href="tel:+61400111299">0400 111 299</a></span>
+          </div>
+          <div class="ci">
+            <span class="ci-label">Or email</span>
+            <span class="ci-value"><a href="mailto:louissakrzewski123@gmail.com">louissakrzewski123@gmail.com</a></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-name">Prevail</span>
+        <span class="brand-sub">Exercise Physiology</span>
+        <p class="footer-tag">Accredited Exercise Physiology across Brisbane &amp; South-East Queensland, and telehealth Australia-wide.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="index.html#funding">Funding</a></li>
+          <li><a href="index.html#check">Check my funding</a></li>
+          <li><a href="for-referrers.html">For referrers</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Get in touch</h4>
+        <ul>
+          <li><a href="tel:+61400111299">0400 111 299</a></li>
+          <li><a href="mailto:louissakrzewski123@gmail.com">louissakrzewski123@gmail.com</a></li>
+          <li><a href="index.html#waitlist">Join the waitlist</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-legal">
+      <p>Louis Sakrzewski-Hetherington · Accredited Exercise Physiologist (ESSA) · ABN 66 352 996 140</p>
+      <p>&copy; <span id="year">2026</span> Prevail Exercise Physiology.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="booking.js" defer></script>
+</body>
+</html>

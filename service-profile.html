@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8" />
+
+  <!-- Security policy. GitHub Pages cannot send custom headers, so this is
+       declared in-document. Must stay above any resource it governs. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; base-uri 'self'; object-src 'none'" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service Profile | Prevail Exercise Physiology</title>
+  <meta name="description" content="One-page service profile for Prevail Exercise Physiology — services, coverage, funding and referral details for support coordinators and participants." />
+  <link rel="canonical" href="https://prevailep.com.au/service-profile.html" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* =================================================================
+       One-page service profile.
+
+       Built to be handed over: a coordinator opens it, hits Print, saves
+       as PDF, and forwards it. Kept as a live page rather than a static
+       PDF so it can never go stale relative to the rest of the site.
+
+       Sized to a single A4 sheet — if you add content, check it still
+       fits by printing to PDF before you rely on it.
+       ================================================================= */
+
+    .sheet {
+      max-width: 800px; margin: 0 auto; background: var(--white);
+      padding: clamp(1.6rem, 4vw, 2.6rem);
+      border: 1px solid var(--line); border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .sp-toolbar {
+      max-width: 800px; margin: 0 auto 1.2rem; display: flex;
+      flex-wrap: wrap; gap: .7rem; align-items: center; justify-content: space-between;
+    }
+    .sp-toolbar p { margin: 0; color: var(--muted); font-size: .92rem; }
+
+    .sp-head { display: flex; gap: 1.2rem; align-items: flex-start; border-bottom: 2px solid var(--brand); padding-bottom: 1.1rem; margin-bottom: 1.3rem; }
+    .sp-head .brand-mark svg { width: 52px; height: 52px; }
+    .sp-title { flex: 1; }
+    .sp-title h1 { font-size: 1.85rem; margin: 0 0 .15rem; }
+    .sp-title .sp-sub { color: var(--brand-dark); font-weight: 600; font-size: .95rem; margin: 0; }
+    .sp-contact { text-align: right; font-size: .88rem; line-height: 1.6; color: var(--muted); }
+    .sp-contact strong { display: block; color: var(--ink); font-size: 1rem; }
+    .sp-contact a { color: var(--brand-dark); }
+
+    .sp-intro { font-size: 1rem; color: var(--ink); margin-bottom: 1.3rem; }
+
+    .sp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem 2rem; }
+    .sp-block h2 {
+      font-family: var(--font-body); font-size: .74rem; letter-spacing: .11em;
+      text-transform: uppercase; color: var(--brand-dark); margin: 0 0 .45rem;
+      padding-bottom: .25rem; border-bottom: 1px solid var(--line);
+    }
+    .sp-block ul { margin: 0; padding-left: 1.05rem; }
+    .sp-block li { font-size: .88rem; color: var(--muted); margin-bottom: .22rem; line-height: 1.45; }
+    .sp-block p { font-size: .88rem; color: var(--muted); margin: 0 0 .4rem; line-height: 1.5; }
+    .sp-block strong { color: var(--ink); }
+
+    .sp-commitments { display: grid; grid-template-columns: repeat(4, 1fr); gap: .7rem; margin: 1.3rem 0; }
+    .sp-commit { background: var(--brand-tint); border-radius: var(--radius-sm); padding: .7rem .6rem; text-align: center; }
+    .sp-commit b { display: block; font-family: var(--font-head); font-size: 1.2rem; color: var(--brand-deep); line-height: 1.1; }
+    .sp-commit span { font-size: .72rem; color: var(--brand-dark); display: block; margin-top: .15rem; line-height: 1.3; }
+
+    .sp-cta {
+      margin-top: 1.3rem; background: var(--brand-deep); color: #dceee9;
+      border-radius: var(--radius-sm); padding: 1rem 1.2rem;
+      display: flex; flex-wrap: wrap; gap: .5rem 1.8rem; align-items: center;
+    }
+    .sp-cta h2 { color: #fff; font-family: var(--font-body); font-size: .74rem; letter-spacing: .11em; text-transform: uppercase; margin: 0; }
+    .sp-cta p { margin: 0; font-size: .9rem; }
+    .sp-cta a { color: var(--mint-glow); text-decoration: underline; }
+
+    .sp-foot { margin-top: 1.1rem; padding-top: .7rem; border-top: 1px solid var(--line); font-size: .74rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: .3rem 1.2rem; justify-content: space-between; }
+
+    @media (max-width: 640px) {
+      .sp-head { flex-direction: column; }
+      .sp-contact { text-align: left; }
+      .sp-grid { grid-template-columns: 1fr; }
+      .sp-commitments { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ---------- Print: one clean A4 sheet ---------- */
+    @media print {
+      @page { size: A4 portrait; margin: 12mm; }
+
+      /* Chrome and Safari strip background colours by default, which would
+         flatten the commitment tiles and the footer band to white. */
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+      body { background: #fff; font-size: 10.5pt; line-height: 1.5; }
+      .site-header, .site-footer, .sp-toolbar, .skip-link { display: none !important; }
+      .section { padding: 0 !important; }
+      .container { padding: 0 !important; max-width: none !important; }
+      .sheet { max-width: none; border: 0; border-radius: 0; box-shadow: none; padding: 0; }
+
+      /* Everything below is height-trimming to hold the whole profile on a
+         single sheet. Measured at A4 with 12mm margins — if you add a bullet
+         or two, print to PDF and check it hasn't spilled onto page two. */
+      .sp-head { padding-bottom: .8rem; margin-bottom: 1rem; }
+      .sp-title h1 { font-size: 1.75rem; }
+      .sp-title .sp-sub { font-size: .9rem; }
+      .sp-contact { font-size: .84rem; line-height: 1.5; }
+      .sp-intro { font-size: 10.5pt; margin-bottom: 1.1rem; }
+      .sp-commitments { margin: 1.1rem 0; gap: .6rem; }
+      .sp-commit { padding: .75rem .5rem; }
+      .sp-commit b { font-size: 1.25rem; }
+      .sp-commit span { font-size: .72rem; }
+      .sp-grid { gap: .9rem 1.6rem; }
+      .sp-block h2 { font-size: .74rem; margin-bottom: .4rem; }
+      .sp-block li, .sp-block p { font-size: 9.6pt; line-height: 1.45; }
+      .sp-block li { margin-bottom: .18rem; }
+      .sp-block p { margin-bottom: .38rem; }
+      .sp-cta { margin-top: 1.1rem; padding: .9rem 1.1rem; }
+      .sp-cta p { font-size: 9.6pt; }
+      .sp-foot { margin-top: .9rem; padding-top: .6rem; font-size: .72rem; }
+      a { text-decoration: none; color: var(--brand-dark); }
+
+      /* Never split a block across the page break. */
+      .sp-block, .sp-commit, .sp-cta { break-inside: avoid; page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Prevail Exercise Physiology — home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" width="40" height="40" role="img">
+            <rect width="40" height="40" rx="11" fill="url(#pg1)"></rect>
+            <defs>
+              <linearGradient id="pg1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#1b8f83"></stop>
+                <stop offset="1" stop-color="#0f5a54"></stop>
+              </linearGradient>
+            </defs>
+            <rect x="10" y="23" width="4.6" height="7" rx="2.3" fill="#fff" opacity="0.92"></rect>
+            <rect x="17.7" y="18" width="4.6" height="12" rx="2.3" fill="#fff" opacity="0.96"></rect>
+            <rect x="25.4" y="12" width="4.6" height="18" rx="2.3" fill="#fff"></rect>
+            <circle cx="27.7" cy="8.4" r="2.4" fill="#8fe0d3"></circle>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <span class="brand-name">Prevail</span>
+          <span class="brand-sub">Exercise Physiology</span>
+        </span>
+      </a>
+      <nav class="main-nav" aria-label="Primary">
+        <ul class="nav-list">
+          <li><a href="for-referrers.html">For referrers</a></li>
+          <li><a class="btn btn-primary btn-sm" href="for-referrers.html#refer">Make a referral</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section">
+      <div class="container">
+
+        <div class="sp-toolbar">
+          <p>One page. Print it, save it as a PDF, forward it to whoever needs it.</p>
+          <button type="button" class="btn btn-primary btn-sm" id="sp-print">Print / Save as PDF</button>
+        </div>
+
+        <article class="sheet">
+
+          <div class="sp-head">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 40 40" width="52" height="52" role="img">
+                <rect width="40" height="40" rx="11" fill="url(#pg2)"></rect>
+                <defs>
+                  <linearGradient id="pg2" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#1b8f83"></stop>
+                    <stop offset="1" stop-color="#0f5a54"></stop>
+                  </linearGradient>
+                </defs>
+                <rect x="10" y="23" width="4.6" height="7" rx="2.3" fill="#fff" opacity="0.92"></rect>
+                <rect x="17.7" y="18" width="4.6" height="12" rx="2.3" fill="#fff" opacity="0.96"></rect>
+                <rect x="25.4" y="12" width="4.6" height="18" rx="2.3" fill="#fff"></rect>
+                <circle cx="27.7" cy="8.4" r="2.4" fill="#8fe0d3"></circle>
+              </svg>
+            </span>
+            <div class="sp-title">
+              <h1>Prevail Exercise Physiology</h1>
+              <p class="sp-sub">Accredited Exercise Physiology · Mobile, in-home &amp; telehealth · Brisbane &amp; SE QLD</p>
+            </div>
+            <div class="sp-contact">
+              <strong>Louis Sakrzewski-Hetherington</strong>
+              AEP (ESSA)<br />
+              <a href="tel:+61400111299">0400 111 299</a><br />
+              <a href="mailto:louissakrzewski123@gmail.com">louissakrzewski123@gmail.com</a><br />
+              prevailep.com.au
+            </div>
+          </div>
+
+          <p class="sp-intro">Prevail is a solo Accredited Exercise Physiology practice supporting people living with disability, injury and complex health needs to build strength, confidence and independence — delivered in the participant's own home, in their community, or via telehealth. Caseload is kept deliberately small so every participant sees the same clinician every session.</p>
+
+          <div class="sp-commitments">
+            <div class="sp-commit"><b>1 day</b><span>Referrals acknowledged</span></div>
+            <div class="sp-commit"><b>2 weeks</b><span>To initial assessment</span></div>
+            <div class="sp-commit"><b>5 days</b><span>Reports delivered</span></div>
+            <div class="sp-commit"><b>1 clinician</b><span>Every session</span></div>
+          </div>
+
+          <div class="sp-grid">
+
+            <div class="sp-block">
+              <h2>Services</h2>
+              <ul>
+                <li>Comprehensive assessment with baseline outcome measures</li>
+                <li>Individualised exercise programs for the home environment</li>
+                <li>In-home and community-based sessions</li>
+                <li>Telehealth consultations Australia-wide</li>
+                <li>Functional capacity and mobility work</li>
+                <li>Movement-based support for mental health and regulation</li>
+                <li>Written progress reporting for plan reviews</li>
+              </ul>
+            </div>
+
+            <div class="sp-block">
+              <h2>Who I work with</h2>
+              <ul>
+                <li>Cerebral palsy and other neurodevelopmental conditions</li>
+                <li>Acquired and traumatic brain injury</li>
+                <li>Epilepsy</li>
+                <li>Autism and intellectual disability</li>
+                <li>Neurodegenerative conditions</li>
+                <li>Chronic pain, fatigue and chronic disease</li>
+                <li>Co-occurring mental health challenges</li>
+              </ul>
+            </div>
+
+            <div class="sp-block">
+              <h2>Funding accepted</h2>
+              <ul>
+                <li><strong>NDIS</strong> — self-managed and plan-managed participants</li>
+                <li><strong>Medicare</strong> — Chronic Disease Management (GP referral)</li>
+                <li><strong>DVA</strong> — Gold and White Card holders (D904 referral)</li>
+                <li><strong>WorkCover</strong> — approved claims</li>
+                <li><strong>Private</strong> — no referral required</li>
+              </ul>
+              <p style="margin-top:.4rem;"><strong>Not NDIS-registered</strong> — NDIA-managed funding cannot be used.</p>
+            </div>
+
+            <div class="sp-block">
+              <h2>NDIS delivery</h2>
+              <p>Delivered under <strong>Capacity Building — Improved Daily Living</strong>.</p>
+              <p>All charges within the current NDIS Pricing Arrangements. Travel and agreed report-writing time itemised on every invoice.</p>
+              <p>Plan-managed participants: invoiced directly to the plan manager. Self-managed: invoiced to the participant or nominee, fortnightly.</p>
+            </div>
+
+            <div class="sp-block">
+              <h2>Coverage</h2>
+              <p>In-home and community sessions across Brisbane — north, south, east and west — plus Logan, Redlands, Ipswich and Moreton Bay.</p>
+              <p>Telehealth available to participants anywhere in Australia.</p>
+            </div>
+
+            <div class="sp-block">
+              <h2>Credentials</h2>
+              <ul>
+                <li>ESSA-Accredited Exercise Physiologist (AEP)</li>
+                <li>University-qualified, evidence-based practice</li>
+                <li>Full professional indemnity and public liability insurance</li>
+                <!-- TODO (Louis): uncomment once you hold these and can produce
+                     the clearance numbers on request. Coordinators do ask, and
+                     an unverifiable claim on a document they forward to a
+                     participant is worse than no claim at all. -->
+                <!-- <li>NDIS Worker Screening clearance and Working with Children check</li> -->
+              </ul>
+            </div>
+
+          </div>
+
+          <div class="sp-cta">
+            <div>
+              <h2>To refer</h2>
+              <p>Call <strong>0400 111 299</strong>, email, or use the two-minute form at <a href="https://prevailep.com.au/for-referrers.html">prevailep.com.au/for-referrers</a></p>
+            </div>
+            <div>
+              <h2>Participants &amp; families</h2>
+              <p>Book a free 15-minute chat at <a href="https://prevailep.com.au/booking.html">prevailep.com.au/booking</a></p>
+            </div>
+          </div>
+
+          <div class="sp-foot">
+            <span>Louis Sakrzewski-Hetherington · Accredited Exercise Physiologist (ESSA) · ABN 66 352 996 140</span>
+            <span>prevailep.com.au · 0400 111 299</span>
+          </div>
+
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-legal" style="border-top:0;">
+      <p>Louis Sakrzewski-Hetherington · Accredited Exercise Physiologist (ESSA) · ABN 66 352 996 140</p>
+      <p>&copy; <span id="year">2026</span> Prevail Exercise Physiology · <a href="index.html" style="color:#9dc0b9;text-decoration:underline;">Home</a> · <a href="for-referrers.html" style="color:#9dc0b9;text-decoration:underline;">For referrers</a></p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="print.js" defer></script>
+</body>
+</html>

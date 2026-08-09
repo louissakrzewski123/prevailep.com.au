@@ -115,4 +115,58 @@
     var d = (e && e.detail) || {};
     track("waitlist_error", { error_type: d.reason || "unknown" });
   });
+
+  /* ---------- Funding checker ----------
+     The single most useful thing this measures: which funding types
+     people actually arrive with, and how many bail out mid-flow. Only
+     the fixed answer values are sent — the checker collects nothing else. */
+  document.addEventListener("prevail:checker-step", function (e) {
+    var d = (e && e.detail) || {};
+    track("checker_step", { step: d.step || "", choice: d.choice || "" });
+  });
+
+  document.addEventListener("prevail:checker-result", function (e) {
+    var d = (e && e.detail) || {};
+    track("checker_result", {
+      funding: d.funding || "not specified",
+      verdict: d.verdict || ""   // yes / maybe / no
+    });
+  });
+
+  document.addEventListener("prevail:checker-restart", function () {
+    track("checker_restart");
+  });
+
+  /* ---------- Intro-call bookings ---------- */
+  document.addEventListener("prevail:booking-slot", function () {
+    track("booking_slot_selected");
+  });
+
+  document.addEventListener("prevail:booking-success", function (e) {
+    var d = (e && e.detail) || {};
+    track("generate_lead", { lead_type: "intro_call", enquiring_as: d.enquiring_as || "not specified" });
+  });
+
+  document.addEventListener("prevail:booking-error", function (e) {
+    var d = (e && e.detail) || {};
+    track("booking_error", { error_type: d.reason || "unknown" });
+  });
+
+  /* ---------- Referrals ----------
+     Referrals are the highest-value conversion on the site — one
+     coordinator can send participants for years. Tracked separately so
+     they don't get lost inside the general lead count. */
+  document.addEventListener("prevail:referral-success", function (e) {
+    var d = (e && e.detail) || {};
+    track("generate_lead", {
+      lead_type: "referral",
+      referrer_type: d.referrer_type || "not specified",
+      plan_management: d.plan_management || "not specified"
+    });
+  });
+
+  document.addEventListener("prevail:referral-error", function (e) {
+    var d = (e && e.detail) || {};
+    track("referral_error", { error_type: d.reason || "unknown" });
+  });
 })();
