@@ -21,6 +21,12 @@
   // Not configured yet — stay completely inert.
   if (MEASUREMENT_ID.indexOf("G-") !== 0) { return; }
 
+  // Don't measure local development. Without this, every click made while
+  // building a page lands in the production property as real traffic.
+  var host = location.hostname;
+  if (host === "localhost" || host === "127.0.0.1" || host === "::1" ||
+      host === "" /* file:// */ || host.slice(-6) === ".local") { return; }
+
   /* ---------- Bootstrap gtag ---------- */
   window.dataLayer = window.dataLayer || [];
   function gtag() { window.dataLayer.push(arguments); }
