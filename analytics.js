@@ -16,7 +16,7 @@
 (function () {
   "use strict";
 
-  var MEASUREMENT_ID = "REPLACE_WITH_GA4_MEASUREMENT_ID";
+  var MEASUREMENT_ID = "G-2R5DVDM991";
 
   // Not configured yet — stay completely inert.
   if (MEASUREMENT_ID.indexOf("G-") !== 0) { return; }
