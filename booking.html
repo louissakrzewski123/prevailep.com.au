@@ -7,7 +7,7 @@
        declared in-document. Must stay above any resource it governs.
        Note: frame-ancestors / X-Frame-Options / nosniff are header-only and
        cannot be set here — see .github/DEPLOY-GUIDE.md -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://www.googletagmanager.com; connect-src 'self' https://api.web3forms.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com; form-action 'self' https://api.web3forms.com; base-uri 'self'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://www.googletagmanager.com https://app.cal.com; frame-src https://app.cal.com https://cal.com; connect-src 'self' https://api.web3forms.com https://app.cal.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com; form-action 'self' https://api.web3forms.com; base-uri 'self'; object-src 'none'" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -88,7 +88,17 @@
 
     <section class="section">
       <div class="container narrow">
-        <div class="booking">
+        <p class="booking-note">Your booking comes to me as a request — I'll confirm it by text or email within one business day. If you'd rather not book online, just ring <a href="tel:+61400111299">0400&nbsp;111&nbsp;299</a>.</p>
+
+        <!-- Cal.com widget. Hidden until CAL_LINK is set in cal-embed.js,
+             which then hides the hand-maintained picker below. Cal shows
+             times in the visitor's own timezone and lets them switch it,
+             so there's no fixed Brisbane badge on this path. -->
+        <div class="cal-mount" id="cal-embed" hidden></div>
+
+        <!-- Hand-maintained picker. Live until Cal.com is configured, and
+             the fallback if the widget is ever blocked. See booking.js. -->
+        <div class="booking" id="legacy-booking">
           <span class="booking-tz">◷ All times in Brisbane (AEST)</span>
 
           <p class="booking-label" id="day-label">1. Pick a day</p>
@@ -250,6 +260,10 @@
   </footer>
 
   <script src="script.js"></script>
+  <!-- Order matters: cal-embed.js decides which picker is live, and
+       booking.js checks that decision. Both deferred, so they run in
+       document order. -->
+  <script src="cal-embed.js" defer></script>
   <script src="booking.js" defer></script>
 </body>
 </html>

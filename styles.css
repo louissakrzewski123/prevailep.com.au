@@ -393,6 +393,24 @@ em { font-style: italic; }
    ===================================================================== */
 .booking { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: clamp(1.4rem, 4vw, 2.4rem); box-shadow: var(--shadow); }
 .booking-tz { display: inline-flex; align-items: center; gap: .45rem; font-size: .86rem; font-weight: 600; color: var(--brand-dark); background: var(--brand-tint); padding: .4rem .8rem; border-radius: 999px; margin-bottom: 1.4rem; }
+.booking-note { color: var(--muted); font-size: .95rem; margin: 0 0 1.2rem; }
+
+/* Cal.com widget mount. Less padding than .booking because the widget
+   brings its own — the card here is just the frame around it. The
+   min-height stops the page jumping as the iframe sizes itself, and
+   Cal's own styles drive everything inside.
+
+   Named .cal-mount, not .cal-embed: Cal gives its own injected iframe
+   class="cal-embed", so that name would style the iframe as a second
+   card — doubled border, doubled shadow, and a 620px floor on an
+   element that sizes itself. */
+.cal-mount {
+  background: var(--white); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); padding: clamp(.5rem, 2vw, 1rem);
+  box-shadow: var(--shadow); overflow: hidden; min-height: 620px;
+}
+.cal-mount iframe { width: 100%; border: 0; }
+@media (max-width: 640px) { .cal-mount { min-height: 760px; } }
 .booking-label { font-weight: 600; font-size: .95rem; margin: 0 0 .7rem; color: var(--ink); }
 
 /* Horizontal day strip; scrolls on narrow screens rather than wrapping. */

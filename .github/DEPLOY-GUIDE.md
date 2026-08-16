@@ -160,14 +160,85 @@ Correct — Australian privacy law doesn't require one, and the Privacy Act is s
 
 ---
 
-## When you're ready to take bookings
+## Turning on Cal.com for the intro call
 
-The site's current path is waitlist → intro chat → assessment. For online booking, the options that suit allied health in Australia:
+The booking page ships with two pickers. Which one runs depends on a single
+line in `cal-embed.js`:
 
-- **Halaxy** or **Cliniko** — practice management + booking, handle NDIS invoicing. Best long-term.
-- **Calendly** / **Cal.com** — simplest if you just want intro calls booked.
+- **`CAL_LINK` not set** (how it ships) — the hand-maintained picker in
+  `booking.js` is live. It shows the times listed in its `AVAILABILITY`
+  block, and you keep the `booked` list up to date yourself.
+- **`CAL_LINK` set** — Cal.com takes over. It reads your Google Calendar,
+  so slots that clash with something already in your diary stop being
+  offered without you doing anything. `booking.js` stands down, and comes
+  back automatically if the widget is ever blocked or unreachable.
 
-Swap the waitlist button for a "Book a session" link, or embed the widget.
+Nothing breaks in between, so there's no rush to finish this in one sitting.
+
+**Status: done.** `CAL_LINK` is set to `prevail-ep/intro-call` and the account
+is configured, so Cal.com is the live picker. The steps below are kept as a
+record of how it was set up — useful if you ever add a second event type or
+need to rebuild it. **The one thing still worth reviewing is availability
+(step 3)** — it's on Cal's default Mon–Fri 9am–5pm.
+
+### Setup, once
+
+1. **Create a free account** at cal.com. The username you pick becomes part
+   of your booking URL — something like `prevail-ep`.
+2. **Connect Google Calendar** (Settings → Apps → Calendars). Two separate
+   choices worth getting right: which calendars it *checks* for conflicts,
+   and which calendar it *writes* confirmed bookings to.
+3. **Set your availability** — the hours you're willing to take intro calls.
+   This is the outer boundary; Cal subtracts your real calendar events from
+   it. Set the timezone to **Australia/Brisbane**.
+4. **Create the event type**: 15 minutes, slug `intro-call`. Under *Limits*,
+   match what the old picker did — minimum notice **18 hours**, bookable
+   **21 days** out.
+5. **Turn on "Requires confirmation"** (event type → **Privacy & security**,
+   not Confirmation — that tab is about confirmation *emails*). This is the
+   important one. It keeps today's behaviour: a booking arrives as a request
+   you approve, not a locked-in appointment. Leave "Unconfirmed bookings
+   still block calendar slots" ticked, so two people can't request the same
+   slot while you're deciding.
+6. **Add the booking questions** so you still collect what the old form did.
+   Under **Booking form**, add "I'm enquiring as" (select — participant/client,
+   family or carer, support coordinator, GP or health professional, private
+   client, other) and a **required checkbox for privacy consent** linking to
+   prevailep.com.au/privacy.html. Phone is already covered: setting the
+   location to "Attendee phone number" makes it a required field, so don't
+   also enable the separate Phone question or people will type it twice.
+7. **Paste your link into `cal-embed.js`** — just the path part, no domain.
+   If your page is `cal.com/prevail-ep/intro-call`, the line reads:
+
+   ```js
+   var CAL_LINK = "prevail-ep/intro-call";
+   ```
+
+Deploy, then load `/booking.html` and check the widget renders and the times
+match your real calendar.
+
+### Afterwards
+
+- **`privacy.html` — done.** Section 9 now discloses both Cal.com and
+  Web3Forms as overseas recipients under Australian Privacy Principle 8, and
+  offers phone or email as an alternative for anyone who would rather their
+  details didn't go through them.
+- **The draft banner on `privacy.html` matters more now.** The booking form
+  asks people to tick that they've read this policy, and it still carries a
+  "draft prepared for review" box and `[to be set on approval]` where the
+  effective date should be. Consent to a policy marked draft is a weak
+  footing — worth closing off.
+- **Keep `booking.js` roughly current.** It's the fallback now rather than
+  the main path, but if Cal is ever blocked it's what visitors see — so
+  don't let its `AVAILABILITY` block drift so far from reality that it
+  offers times you'd never take.
+
+### Longer term
+
+If you move to full practice management, **Halaxy** or **Cliniko** handle
+booking *and* NDIS invoicing. Point the "Book a free 15-min chat" links at
+whichever tool wins; they're in `index.html`, `for-referrers.html` and
+`service-profile.html`.
 
 ---
 

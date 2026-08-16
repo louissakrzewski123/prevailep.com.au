@@ -1,10 +1,15 @@
 /* =====================================================================
    Prevail Exercise Physiology — booking.js
-   Intro-call time picker.
+   Intro-call time picker — the hand-maintained fallback.
 
-   ══ SET YOUR AVAILABILITY HERE ══════════════════════════════════════
-   Everything you need to change lives in the AVAILABILITY block below.
-   Edit it, save, push. No other file needs touching.
+   ══ WHICH PICKER IS LIVE? ═══════════════════════════════════════════
+   Once CAL_LINK is set in cal-embed.js, Cal.com takes over the booking
+   page and this file stands down (see the early return below). It stays
+   as the fallback for when Cal is blocked or unreachable, so the page
+   is never a dead end.
+
+   Until then this is what visitors see, and the AVAILABILITY block
+   below is what they get. Edit it, save, push.
 
    ── An honest note on how this works ────────────────────────────────
    The site is static files with no server and no database, so this
@@ -13,12 +18,10 @@
    as a REQUEST that you confirm. The page says exactly that, so nobody
    is misled into thinking they have a locked-in appointment.
 
-   Two things follow from that:
-   1. Add taken times to `booked` below so they stop being offered.
-      Do this as you confirm bookings — it takes ten seconds.
-   2. If this ever gets busy enough to be annoying, move to a real
-      booking tool (Cal.com has a free tier) and point the button at
-      it. See .github/DEPLOY-GUIDE.md for the swap.
+   So while this is the live picker, add taken times to `booked` below
+   as you confirm bookings, or they'll keep being offered. Moving to
+   Cal.com is what makes that stop being your job — the setup steps are
+   in .github/DEPLOY-GUIDE.md.
 
    All times are Brisbane time. Queensland has no daylight saving, so
    there is no seasonal adjustment to worry about.
@@ -67,6 +70,14 @@
     durationMinutes: 15
   };
   /* ═══════════════════════════════════════════════════════════════════ */
+
+  /* ---------- Stand down if Cal.com is running ----------
+     cal-embed.js is loaded first and hides this block when it takes
+     over, so only one picker is ever live. If Cal later fails to load
+     it un-hides this block and re-runs the file, at which point the
+     check passes and the picker renders as normal. */
+  var legacy = document.getElementById("legacy-booking");
+  if (legacy && legacy.hidden) { return; }
 
   var strip = document.getElementById("day-strip");
   var slotWrap = document.getElementById("slot-wrap");
