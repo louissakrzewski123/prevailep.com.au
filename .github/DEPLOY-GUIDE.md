@@ -148,7 +148,7 @@ Correct — Australian privacy law doesn't require one, and the Privacy Act is s
 - [x] ~~**Waitlist form connected.**~~ Web3Forms key is live in `index.html`. Signups email `louissakrzewski123@gmail.com`. Manage the form at [web3forms.com](https://web3forms.com).
 - [x] ~~Tick **Enforce HTTPS**~~ — done, certificate issued and `http://` now 301s to `https://`.
 - [ ] **Paste the GA4 Measurement ID into `analytics.js`** (see *Google Analytics* above). Everything else is wired.
-- [ ] **Remove the draft banner and set the effective date on `privacy.html`.** The grey "This is a draft policy prepared for review" box is publicly visible right now, and the date reads `[to be set on approval]`.
+- [x] **Remove the draft banner and set the effective date on `privacy.html`.** Done — effective 17 August 2026, draft box removed.
 - [ ] Confirm the contact email. Currently `louissakrzewski123@gmail.com`; a `hello@prevailep.com.au` address would look more professional.
 - [ ] Add a photo in the About section (placeholder marked *"Add a friendly photo of Louis here"*).
 - [ ] Fix `medicalSpecialty` in the structured data in `index.html` — it currently says `Physiotherapy`, which is a protected AHPRA title you don't hold. Closest valid schema.org value is `PhysicalTherapy`, or drop the field.
@@ -222,12 +222,13 @@ match your real calendar.
 - **`privacy.html` — done.** Section 9 now discloses both Cal.com and
   Web3Forms as overseas recipients under Australian Privacy Principle 8, and
   offers phone or email as an alternative for anyone who would rather their
-  details didn't go through them.
-- **The draft banner on `privacy.html` matters more now.** The booking form
-  asks people to tick that they've read this policy, and it still carries a
-  "draft prepared for review" box and `[to be set on approval]` where the
-  effective date should be. Consent to a policy marked draft is a weak
-  footing — worth closing off.
+  details didn't go through them. The policy is no longer marked draft and
+  is effective 17 August 2026 — which matters, because the booking form asks
+  people to tick that they've read it, and consent to a document labelled
+  "draft" is a weak footing.
+- **Re-date the policy whenever you change it.** Both the effective date and
+  "last updated" are now real dates rather than placeholders, so they need
+  to move when the wording does.
 - **Keep `booking.js` roughly current.** It's the fallback now rather than
   the main path, but if Cal is ever blocked it's what visitors see — so
   don't let its `AVAILABILITY` block drift so far from reality that it
