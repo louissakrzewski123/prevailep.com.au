@@ -205,30 +205,21 @@ identical to a working one from the DNS side.
 - [ ] **Publish SPF, DKIM and DMARC** — see *Email authentication* above. The
       highest-value item on this list: every path through the site ends in you
       emailing someone back.
-- [ ] **Re-issue the Web3Forms key against `hello@prevailep.com.au`.** The site
-      now *displays* the new address everywhere, but the key
-      `18d2da56-0898-432a-a40b-cee9866d1ed1` is bound to the address it was
-      created with, so waitlist, referral and booking-form submissions still
-      arrive at the old Gmail. Generate a new key at
-      [web3forms.com](https://web3forms.com) and replace it in **three** files:
-      `index.html`, `booking.html`, `for-referrers.html`.
 - [ ] **Change the notification address on the Cal.com account** (Settings →
       Account). Booking requests go wherever the account points, not where the
       page says.
 - [ ] **Review Cal.com availability** — still on the default Mon–Fri 9am–5pm.
       Set it to hours you would genuinely take a call, in Australia/Brisbane.
 
-**Content that gets worse with traffic, not better:**
+**Content:**
 
-- [ ] **Trim the suburb list in `for-referrers.html`** (marked `TODO` in the
-      file). A coordinator who books you for a suburb you won't drive to is a
-      worse outcome than one who never calls.
-- [ ] **NDIS Worker Screening / WWCC in `service-profile.html`** — currently
-      commented out. Coordinators ask for these routinely. Uncomment once you
-      hold them and can produce the numbers on request.
-- [ ] **Add a service address to the structured data in `index.html`** — local
-      SEO leans on it heavily. A service-area business can list a suburb
-      without publishing a street address.
+- [ ] **NDIS Worker Screening / WWCC in `service-profile.html`** — still
+      commented out, pending the clearances. Note this is *not* a legal blocker:
+      Worker Screening is mandatory for registered providers in risk-assessed
+      roles, and Prevail is unregistered, taking only self- and plan-managed
+      participants. Coordinators do still ask, so it's a commercial gap rather
+      than a compliance one. Uncomment the line once the numbers exist and can
+      be produced on request.
 
 **Discoverability:**
 
@@ -237,7 +228,6 @@ identical to a working one from the DNS side.
 - [ ] **Confirm `sitemap.xml` was submitted** in Search Console. Verification
       itself is done (meta tag and TXT record both present); submission is a
       separate step and can't be checked from outside.
-- [ ] *(Optional)* Add ESSA / AEP registration number as a trust signal.
 - [ ] *(Optional)* Add 2–3 testimonials once you have written, de-identified consent.
 
 **Done:**
@@ -250,12 +240,47 @@ identical to a working one from the DNS side.
 - [x] ~~Swap the contact address to `hello@prevailep.com.au`~~ — done across
       `index.html` (including structured data), `booking.html`,
       `for-referrers.html`, `service-profile.html`, `privacy.html` and the
-      form-failure message in `script.js`. **Note the two follow-ups above** —
-      Web3Forms and Cal.com are separate systems and did not move with it.
+      form-failure message in `script.js`. Web3Forms followed (below); **Cal.com
+      is still outstanding** — it's a separate system with its own notification
+      address, and it did not move with this.
 - [x] ~~Add a photo in the About section~~ — `about-louis.jpg`.
 - [x] ~~Fix `medicalSpecialty` in the structured data~~ — field dropped.
+- [x] ~~Re-issue the Web3Forms key against `hello@prevailep.com.au`~~ — key
+      `93210d81-c28c-47c1-9651-b04172fda6cb` is live in `index.html`,
+      `booking.html` and `for-referrers.html`. Site display and actual delivery
+      destination now agree.
+- [x] ~~Add a service address to the structured data~~ — Paddington QLD 4064,
+      as a `PostalAddress` plus a `GeoCircle` `areaServed`.
+- [x] ~~Trim the suburb list in `for-referrers.html`~~ — now a 12 km radius from
+      Paddington. See *Service area* below.
 - [x] ~~Verify the site in Google Search Console~~ — meta tag in `index.html`
       plus a TXT record on the domain.
+
+---
+
+## Service area
+
+The advertised area is **roughly a 12 km radius from Paddington 4064**. Before
+that was set, the site claimed Brisbane *and* Logan, Redlands, Ipswich and
+Moreton Bay — a far larger area than could actually be serviced, and the kind of
+claim that produces a booking you have to withdraw from.
+
+It is stated in **four places that must move together**:
+
+| Where | What it says |
+|-------|--------------|
+| `index.html` structured data | `areaServed` as a `GeoCircle` — midpoint −27.4606, 152.9963, `geoRadius` 12000 (metres) |
+| `index.html` FAQ | Both the visible answer **and** its mirror in the `FAQPage` JSON-LD |
+| `for-referrers.html` | Section intro plus the four-column suburb grid |
+| `service-profile.html` | The Coverage block |
+
+Footers and meta descriptions across all pages also carry the short form
+("within about 12 km of Paddington"). Grep for `Paddington` before changing the
+radius and you'll find every one of them.
+
+**The suburb grid is illustrative, not exhaustive** — that's stated in the copy,
+which is what keeps the list from being a promise. The note under it invites
+people just outside to ask anyway, so a near-miss doesn't become a lost referral.
 
 ---
 
