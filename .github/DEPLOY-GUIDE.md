@@ -205,9 +205,6 @@ identical to a working one from the DNS side.
 - [ ] **Publish SPF, DKIM and DMARC** — see *Email authentication* above. The
       highest-value item on this list: every path through the site ends in you
       emailing someone back.
-- [ ] **Change the notification address on the Cal.com account** (Settings →
-      Account). Booking requests go wherever the account points, not where the
-      page says.
 - [ ] **Review Cal.com availability** — still on the default Mon–Fri 9am–5pm.
       Set it to hours you would genuinely take a call, in Australia/Brisbane.
 
@@ -223,12 +220,20 @@ identical to a working one from the DNS side.
 
 **Discoverability:**
 
-- [ ] **Create a Google Business Profile** — free, and the single biggest lever
-      for local search and Maps.
+- [~] **Google Business Profile** — in progress as of 18 August 2026.
 - [ ] **Confirm `sitemap.xml` was submitted** in Search Console. Verification
       itself is done (meta tag and TXT record both present); submission is a
       separate step and can't be checked from outside.
 - [ ] *(Optional)* Add 2–3 testimonials once you have written, de-identified consent.
+
+**Decided, not doing:**
+
+- **Cal.com notifications stay on the personal address.** Deliberate: the
+  account is tied to the personal Google Calendar that Cal reads for conflicts,
+  so splitting the notification address off would mean either moving the
+  calendar or running two. Worth revisiting only if someone else ever needs to
+  see bookings, or if `hello@` becomes the address you actually watch.
+- **ESSA / AEP registration number is not shown** on the site.
 
 **Done:**
 
