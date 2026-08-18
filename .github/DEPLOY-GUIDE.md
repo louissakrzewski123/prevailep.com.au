@@ -24,7 +24,7 @@ Internal notes. This file lives in `.github/` so GitHub Pages does **not** publi
 | `privacy.html` | Privacy policy page |
 | `styles.css` | All the styling / design |
 | `script.js` | Mobile menu + waitlist form logic |
-| `analytics.js` | Google Analytics 4 + conversion tracking. **Needs your Measurement ID pasted in** — see below |
+| `analytics.js` | Google Analytics 4 + conversion tracking. Live on `G-2R5DVDM991` |
 | `favicon.svg`, `apple-touch-icon.png` | Browser tab + phone icons |
 | `og-image.png` | Preview image shown when the link is shared |
 | `robots.txt`, `sitemap.xml` | SEO |
@@ -66,7 +66,17 @@ For reference, in VIPControl → Domain Names → `prevailep.com.au` → **DNS H
 
 All four A records are required — they're a redundancy set, not alternatives. Current values can always be re-checked at `https://api.github.com/meta` under `pages`.
 
-There are **no MX or TXT records** on this domain, so no email depends on it.
+The domain also carries **email records** now that Google Workspace hosts
+`hello@prevailep.com.au`. These are nothing to do with the website — deleting
+them breaks mail, not Pages, and vice versa.
+
+| Type | Hostname | Value | Purpose |
+|------|----------|-------|---------|
+| `MX` | *(blank)* | `1 SMTP.GOOGLE.COM` | Delivers mail to Workspace |
+| `TXT` | *(blank)* | `google-site-verification=...` | Proves domain ownership |
+
+See **Email authentication** below for the SPF, DKIM and DMARC records that
+still need adding.
 
 ---
 
@@ -90,13 +100,16 @@ The subject must be `CN=prevailep.com.au`. If it says `CN=*.github.io`, the cert
 
 ## Google Analytics
 
-### Turning it on (5 minutes, one line to edit)
+### Turning it on — **done**, kept as a record
+
+The Measurement ID `G-2R5DVDM991` is already in `analytics.js` and reporting. These
+steps are only useful if you ever rebuild the property from scratch.
 
 1. Go to [analytics.google.com](https://analytics.google.com) and sign in with your Google account.
 2. **Admin** (cog, bottom-left) → **Create** → **Property**. Name it `Prevail Exercise Physiology`, timezone **Australia/Brisbane**, currency **AUD**.
 3. When it asks for a platform, choose **Web**. Website URL `https://prevailep.com.au`, stream name `Prevail website`.
 4. It shows you a **Measurement ID** in the top right — `G-` followed by ten characters. Copy it. *(Ignore the installation snippet it offers; it's already wired up.)*
-5. Open `analytics.js` and replace `REPLACE_WITH_GA4_MEASUREMENT_ID` on line 19 with that ID. Keep the quotes:
+5. Open `analytics.js` and replace the ID on the `MEASUREMENT_ID` line with that one. Keep the quotes:
 
    ```js
    var MEASUREMENT_ID = "G-ABC1234XYZ";
@@ -104,7 +117,7 @@ The subject must be `CN=prevailep.com.au`. If it says `CN=*.github.io`, the cert
 
 6. Commit and push. Open the site, then check **Reports → Realtime** in Analytics — you should appear within about 30 seconds.
 
-Until step 5 is done the file is completely inert: no cookies are set and no requests are made to Google.
+Note that without a Measurement ID the file is completely inert — no cookies set, no requests to Google. That's the state it ships in, not the state it's in now.
 
 ### What gets tracked
 
@@ -143,20 +156,106 @@ Correct — Australian privacy law doesn't require one, and the Privacy Act is s
 
 ---
 
+## Email authentication (SPF, DKIM, DMARC)
+
+**Status: not done.** Mail is delivered to Workspace, but the domain does not
+yet prove that mail *sent from it* is genuine. Unauthenticated mail from a new
+domain with no sending reputation is the textbook spam profile, and the people
+this site is built to reach — GPs, support coordinators, plan managers — sit
+behind exactly the corporate filters that act on it. Nothing bounces; it just
+silently lands in Junk, so you never learn it happened.
+
+All three go in VIPControl → DNS Hosting. Remember the blank-Hostname quirk above.
+
+| Type | Hostname | Value |
+|------|----------|-------|
+| `TXT` | *(blank)* | `v=spf1 include:_spf.google.com ~all` |
+| `TXT` | `google._domainkey` | *(generated — see below)* |
+| `TXT` | `_dmarc` | `v=DMARC1; p=none; rua=mailto:hello@prevailep.com.au` |
+
+**DKIM needs generating first.** Google Admin → Apps → Google Workspace → Gmail
+→ *Authenticate email*. Generate the record, publish the TXT it gives you, wait
+for propagation, then come back and click **Start authentication** — the key is
+inert until you do.
+
+**DMARC starts at `p=none`** deliberately: it reports without rejecting
+anything, so a misconfigured SPF or DKIM can't take your mail offline while
+you're still checking. Once the reports show consistent passes, move to
+`p=quarantine`.
+
+**To verify:**
+
+```bash
+dig +short TXT prevailep.com.au
+dig +short TXT google._domainkey.prevailep.com.au
+dig +short TXT _dmarc.prevailep.com.au
+```
+
+Then send a test to both a Gmail and an Outlook/Hotmail address and check the
+message headers show `spf=pass`, `dkim=pass` and `dmarc=pass`. Header inspection
+is the only real confirmation — a published record that fails alignment looks
+identical to a working one from the DNS side.
+
+---
+
 ## Outstanding to-dos
 
-- [x] ~~**Waitlist form connected.**~~ Web3Forms key is live in `index.html`. Signups email `louissakrzewski123@gmail.com`. Manage the form at [web3forms.com](https://web3forms.com).
-- [x] ~~Tick **Enforce HTTPS**~~ — done, certificate issued and `http://` now 301s to `https://`.
-- [ ] **Paste the GA4 Measurement ID into `analytics.js`** (see *Google Analytics* above). Everything else is wired.
-- [x] **Remove the draft banner and set the effective date on `privacy.html`.** Done — effective 17 August 2026, draft box removed.
-- [ ] Confirm the contact email. Currently `louissakrzewski123@gmail.com`; a `hello@prevailep.com.au` address would look more professional.
-- [ ] Add a photo in the About section (placeholder marked *"Add a friendly photo of Louis here"*).
-- [ ] Fix `medicalSpecialty` in the structured data in `index.html` — it currently says `Physiotherapy`, which is a protected AHPRA title you don't hold. Closest valid schema.org value is `PhysicalTherapy`, or drop the field.
-- [ ] Add a postal/service address to the structured data — local SEO leans on it heavily.
-- [ ] Verify the site in Google Search Console and submit `sitemap.xml`.
-- [ ] Create a Google Business Profile.
+**Before driving any traffic to the site:**
+
+- [ ] **Publish SPF, DKIM and DMARC** — see *Email authentication* above. The
+      highest-value item on this list: every path through the site ends in you
+      emailing someone back.
+- [ ] **Re-issue the Web3Forms key against `hello@prevailep.com.au`.** The site
+      now *displays* the new address everywhere, but the key
+      `18d2da56-0898-432a-a40b-cee9866d1ed1` is bound to the address it was
+      created with, so waitlist, referral and booking-form submissions still
+      arrive at the old Gmail. Generate a new key at
+      [web3forms.com](https://web3forms.com) and replace it in **three** files:
+      `index.html`, `booking.html`, `for-referrers.html`.
+- [ ] **Change the notification address on the Cal.com account** (Settings →
+      Account). Booking requests go wherever the account points, not where the
+      page says.
+- [ ] **Review Cal.com availability** — still on the default Mon–Fri 9am–5pm.
+      Set it to hours you would genuinely take a call, in Australia/Brisbane.
+
+**Content that gets worse with traffic, not better:**
+
+- [ ] **Trim the suburb list in `for-referrers.html`** (marked `TODO` in the
+      file). A coordinator who books you for a suburb you won't drive to is a
+      worse outcome than one who never calls.
+- [ ] **NDIS Worker Screening / WWCC in `service-profile.html`** — currently
+      commented out. Coordinators ask for these routinely. Uncomment once you
+      hold them and can produce the numbers on request.
+- [ ] **Add a service address to the structured data in `index.html`** — local
+      SEO leans on it heavily. A service-area business can list a suburb
+      without publishing a street address.
+
+**Discoverability:**
+
+- [ ] **Create a Google Business Profile** — free, and the single biggest lever
+      for local search and Maps.
+- [ ] **Confirm `sitemap.xml` was submitted** in Search Console. Verification
+      itself is done (meta tag and TXT record both present); submission is a
+      separate step and can't be checked from outside.
 - [ ] *(Optional)* Add ESSA / AEP registration number as a trust signal.
 - [ ] *(Optional)* Add 2–3 testimonials once you have written, de-identified consent.
+
+**Done:**
+
+- [x] ~~Waitlist form connected.~~ Web3Forms key live in all three form pages.
+- [x] ~~Tick **Enforce HTTPS**~~ — certificate issued, `http://` 301s to `https://`.
+- [x] ~~Paste the GA4 Measurement ID into `analytics.js`~~ — `G-2R5DVDM991` is live.
+- [x] ~~Remove the draft banner and set the effective date on `privacy.html`~~ —
+      effective 17 August 2026.
+- [x] ~~Swap the contact address to `hello@prevailep.com.au`~~ — done across
+      `index.html` (including structured data), `booking.html`,
+      `for-referrers.html`, `service-profile.html`, `privacy.html` and the
+      form-failure message in `script.js`. **Note the two follow-ups above** —
+      Web3Forms and Cal.com are separate systems and did not move with it.
+- [x] ~~Add a photo in the About section~~ — `about-louis.jpg`.
+- [x] ~~Fix `medicalSpecialty` in the structured data~~ — field dropped.
+- [x] ~~Verify the site in Google Search Console~~ — meta tag in `index.html`
+      plus a TXT record on the domain.
 
 ---
 

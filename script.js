@@ -142,7 +142,7 @@
         }
       } catch (err) {
         statusEl.className = "form-status error";
-        statusEl.textContent = "Something went wrong sending this. Please email louissakrzewski123@gmail.com or call 0400 111 299.";
+        statusEl.textContent = "Something went wrong sending this. Please email hello@prevailep.com.au or call 0400 111 299.";
         announce(eventName + "-error", { reason: "network" });
       } finally {
         submitBtn.disabled = false;
